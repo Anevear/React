@@ -1,0 +1,434 @@
+Overview
+Up until now, all components you have been referring to have been stateless components. While that is the recommended way to create components when possible, there are a few situations where that style of component is not possible to use. One example where a stateless component would definitely not work is embedding a non-React component on a page. This is common if you want to reuse an existing JavaScript library such as a calendar control, color picker, or auto-complete field. Since you do not control the HTML the component generates, it cannot participate in the React render cycle. React gives you the option to make decisions about when to render and to respond.
+
+There are other cases where a component might want to retain state, not because it is using an external component but because some concerns are better handled within the component. This might be the contents of a text field component or the current selection of a date picker that you have written yourself in React.
+
+This kind of component is simply called a component, in contrast to the stateless components you have been writing. There are a few different ways to define a React component, with ES6 the most common way is using a class.
+
+
+Class-Based Components
+As noted earlier, it is possible to define a React component in several different ways. You can convert your stateless components to a class-based component. These are similar to the class-based functions available to you in ES6.
+
+Go ahead and start with the Hello, {name} component from Lesson 3. Consider below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const Hello = props => {
+  return (
+    <div>
+      <h1>Hello, {props.name}!</h1>
+    </div>
+  );
+};
+First, you need to create an ES6 class that extends a React.Component, as shown below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class Hello extends React.Component {}
+Tip!
+The React.Component is provided by React and by using it, you are able to use a JavaScript class as a component.
+
+Next, you will need to add a render() method to the Component. The render() method is required when using a class-based component:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class Hello extends React.Component {
+  render() {}
+}
+Next, you will move the body of the Hello component into the render method within a return() statement:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class Hello extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, {props.name}!</h1>
+      </div>
+    );
+  }
+}
+You may have noticed that the render function does not have any parameters. Props are accessed differently when using full React components and are available as this.props:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class Hello extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, {this.props.name}!</h1>
+      </div>
+    );
+  }
+}
+The this component is used in the exact same way as you have in the past. Below is what the entire file will now look like:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return (
+    <div>
+      <Hello name="Nikki" />
+      <Hello name="Michael" />
+      <Hello name="Andrew" />
+    </div>
+  );
+};
+
+class Hello extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, {this.props.name}!</h1>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Above, you have created a full React component using an ES6 class. The rest of the code is exactly how you have done it up until this point. Except, of course, for the fact that you need to use the this keyword when using the props available to you.
+
+Tip!
+Notice how you are using the App component to return the HTML.
+
+Try It!
+Add the above code to your project. You should see `Hello, Nikki!`, `Hello, Michael!` and `Hello, Andrew!` on localhost:8080.
+
+>>> a class-based component can have any number of methods in react and render() is just one of them. but all class-based components MUST extend React.Component.
+
+question ex below (proper react syntax left out for brevity)
+
+const App= props => {
+	return(
+		<Employee />
+	);
+}
+
+class Employee extends React.Component {
+	render() {
+		return (
+			<Person />
+		);
+	}
+}
+
+class Person extends React.Component {
+	render() {
+		return (
+			<div>Shandris Feathermoon</div>
+		);
+	}
+}
+
+now in this code the only component that is stateless is the <App /> component
+
+
+
+
+State
+
+now with the stateless components it doesnt have the data in it it hass its data handed to it from other parts of the code. a component with a state had some if not all the datat that it needs for itself and then when making a component with a state it the constructor() staement is ALWAYS the first to run
+
+
+
+There are two types of data that a component handles: props and state. These two types of data are similar because they are both JavaScript objects. The main difference is that props are passed to the component (similar to passing in parameters to a function) whereas state is managed within the component (similar to declaring variables within a function). State is an object that the component has access to with the ability to read and write data when necessary.
+
+Below, the component BankAccount is declaring the state to have a field of accountBalance that is set to 25:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accountBalance: 25.00
+    };
+  }
+}
+Did you notice how there is now a constructor within the class? When assigning the state, the constructor ensures the React.Component works correctly. The state within the above component is used as storage for all the data in your component.
+
+Caution!
+Be sure to call super(props) before any other statement. Otherwise, this.props will be undefined!
+
+The state can then be accessed within the render() method by calling this.state.propertyName. The this keyword refers to the object itself, state refers to your state object, and the propertyName (in your case, it is accountBalance) refers to the field within the state object so you can target the value needed. Consider below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accountBalance: 25.0
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+      </div>
+    );
+  }
+}
+Now, your entire file should look like the code below (including the App component):
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return (
+    <div>
+      <BankAccount />
+    </div>
+  );
+};
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accountBalance: 25.0
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Try It!
+Add this to your index.js file. You should see "Account Balance: $25" on localhost:8080.
+
+The state can contain many fields within it. For example, it can contain two separate accounts:
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      savings: {
+        accountBalance: 1125.00
+      },
+      checking: {
+        accountBalance: 530.64
+      }
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Savings Account Balance: ${this.state.savings.accountBalance}</h3>
+        <h3>Checking Account Balance: ${this.state.checking.accountBalance}</h3>
+      </div>
+    );
+  }
+}
+Try It!
+Try adding more fields to the state object and then render those specific fields.
+
+
+>>>>> in a components constructor, super(props) NEEDS to be called if you make a change to the components state otherwise this.props will be undefined
+
+a componentes state can contain any number of properties
+
+setState()
+React manages the automatic updating of the DOM when a component's state changes, thats what makes React so great. To ensure that React always re-renders correctly, never directly alter the state of a component. Instead, use the setState() function to change the state. setState() adds any changes to the component state to a queue and tells React that the component in question is ready to be rendered.
+
+When updating the state, you need to use the setState() method and the state should never be updated directly, like below:
+
+// NEVER DO THIS
+this.state.accountBalance = 10000;
+Changing Text
+Now you will look at an example of changing the state of some text. For this example, work along with the below code in your own starter project.
+
+Below, you have a component that has text within its state, and you are returning that text as an <h1> tag:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return <Text />;
+};
+
+class Text extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      text: 'Hello World!!'
+    };
+  
+  }
+  render() {
+    return <h1>{this.state.text}</h1>;
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+You should now see "Hello World!!" on localhost:8080.
+
+Next, you will want to create a custom method on your component that takes in an event and uses setState():
+
+src/index.js file:
+
+class Text extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      text: 'Hello World!!'
+    };
+  }
+
+  update(event) {
+    this.setState({ text: event.target.value });
+  }
+
+  render() {
+    return (
+      <div>
+        <input type="text" onChange={this.update.bind(this)} />
+        <h1>{this.state.text}</h1>
+      </div>
+    );
+  }
+}
+Above, the update() method takes in an event and resets the text field of your state to now be the value of the property that triggered that event. Several lines down, there is now an input that has an onChange attribute that binds the input to the update() method you created. The input is what will trigger the event, and the state will now be replaced with whatever value is within the input.
+
+Try It!
+Add the above code to your starter project. You should now see an input followed by "Hello World!!". Start typing in the input box. You should now see "Hello World!!" be replaced by whatever you are typing in the input box.
+
+The setState() Method - Continued
+Increment Numbers
+Time to return to your bank account. You want to be able to increment the amount available to the account by clicking on a button. Below, you will create an increment() method that takes in the current state and increments the accountBalance by 1. The button within the render() function then calls the increment() method when clicked.
+
+Tip!
+One thing to note: If you are relying on a value from the current state to determine the new state, React can batch updates to the state making this somewhat unpredictable. To avoid this, a function can be provided that is given the current state, which is how you are using the increment() method.
+
+src/index.js file:
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accountBalance: 2222.22
+    };
+  }
+
+  increment() {
+    this.setState({ accountBalance: this.state.accountBalance + 1 });
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+
+
+The setState() Method - Continued
+Increment by Specific Number
+Say that instead of using 1 to increment every time, you wanted to increase the number by a specific, inputting number. You can accomplish that by using a text input. Consider below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return <BankAccount />;
+};
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      accountBalance: 2222.22,
+      addAmount: 0
+    };
+  }
+
+  increment() {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <input
+          type="number"
+          onChange={event => this.setState({ addAmount: event.target.value })}
+          value={this.state.addAmount}
+        />
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Above, you added a new field to your state: addAmount. You will now be updating that field when you type in a number within the input field now living in the render() method. When the input changes (onChange), it will take in an event and then use setState() to update the addAmount field to be the value of whatever the user inputted. Then, within the increment() method, you are updating the accountBalance field to now include whatever was inputted.
+
+Tip!
+Did you notice the use of the parseInt function in the increment function above? When the value of the input is extracted, it is a string. To perform mathematical operations using the value, it is first converted to an integer using parseInt.
+
+Try It!
+Add the above code to your project! You should now see the account balance, but when you input a number and click on the button, the account balance should update to the new number. Pretty cool!
+
+
+Keyword	Description
+Class-Based Components	Components that are able to hold state and use the JS class syntax.
+State	An object that is managed within the component rather that passed to the component. This allows the component to have access to the data with the ability to read and write data when necessary.
+setState()	This is used to add changes to the component state and those changes will then be re-rendered in the browser by React.
+
+
+
+
+
+
+

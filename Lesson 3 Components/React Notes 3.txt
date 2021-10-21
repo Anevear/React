@@ -1,0 +1,655 @@
+Overview
+Up until this point, you have been writing fairly basic React code. It's time to get more in depth!
+
+During this lesson, you are going to learn about what a component is. Fundamentally, a component is just a function but instead accepts props (properties) and returns JSX markup. This JSX markup looks and acts like HTML, but it is only markup. Markup, in its purest form, is just the different parts of what makes up a webpage. For example, in a Word document, you have a header, footnote, italics, bullet points and so on. All of this is considered markup because it really "marks up" the page.
+
+In Lesson 1 and 2, the idea of props, or properties, was used when adding an attribute to a created element. You are going to use this idea by providing an object that contains potentially many fields that you can hand to the HTML. Using an object called props instead of parameters in a function is instead called a component. You will then be able to reuse the created component, including the props object and any included fields, later on in your code without having to remember ordering or exact fields. You will be able to pick and choose what fields you want to use out of the props object instead of making sure every parameter is defined. The props object is information that is passed to a rendered component and then is passed from parent to child. A parent component is one that controls the entire page and then renders other components that control separate parts of the page.
+
+But first, back up a few steps and work up to using components. Remember the grocery list? That is where you will start.
+
+Setup
+Before you get any deeper into components, create a new project by following the below steps:
+
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named React.
+
+Starter Project
+
+Next, move the starter project folder to the FEFReact folder and rename it from React to ReactL03.
+
+Open up your terminal/command prompt.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Next, navigate to the SoftwareDevelopment directory in your terminal.
+
+cd SoftwareDevelopment
+Then, navigate to the FEFReact directory in your terminal.
+
+cd FEFReact
+Now, navigate to the ReactL03 directory in your terminal.
+
+cd ReactL03
+Now that you are in the ReactL03 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/React-Course/test/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Once npm has finished installing, you can test that the server is working with the following command:
+
+npm start
+You should now see your browser open up a blank page with an alert box saying "It's alive!".
+
+Tip!
+You can stop this process by pressing Control + C in the terminal, but for now, keep the server running.
+
+Add the necessary import statements at the top of the src/index.js file and remove the alert that currently lives in that file:
+import React from 'react';
+import ReactDOM from 'react-dom';
+Great! You are ready to get to work! Keep this project open and the server running so you can quickly test code within this lesson.
+
+Create a Component
+Start by remembering the last way you rendered your grocery list:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (
+  item1,
+  item1Price,
+  item2,
+  item2Price,
+  item3,
+  item3Price
+) => {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <ul>
+        <li>{item1Price}</li>
+      </ul>
+      <li>{item2}</li>
+      <ul>
+        <li>{item2Price}</li>
+      </ul>
+      <li>{item3}</li>
+      <ul>
+        <li>{item3Price}</li>
+      </ul>
+    </ul>
+  );
+};
+
+ReactDOM.render(
+  groceryList(
+    'Apples',
+    '$1.00 per lb',
+    'Oranges',
+    '$.70 per lb',
+    'Mangos',
+    '$2.00 per lb'
+  ),
+  document.getElementById('root')
+);
+The above code renders a list as shown below:
+
+Apples
+$1.00 per lb
+Oranges
+$.70 per lb
+Mangos
+$2.00 each
+To start, remove the prices and look at an even simpler example using a function:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (item1, item2, item3) => {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <li>{item2}</li>
+      <li>{item3}</li>
+    </ul>
+  );
+};
+
+ReactDOM.render(
+  groceryList('Apples', 'Oranges', 'Mangos'),
+  document.getElementById('root')
+);
+Great! Now, even though the above code works fine, there is another way to define which items to use. The people who created React wanted to make the code look very similar to HTML code. So rather than defining each of the items in the grocery list like groceryList("Apples", "Oranges", "Mangos"), it is possible to define them like below, so it looks like an HTML element:
+
+src/index.js file:
+
+const groceryList = (item1, item2, item3) => {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <li>{item2}</li>
+      <li>{item3}</li>
+    </ul>
+  );
+};
+
+ReactDOM.render(
+  <groceryList item1="Apples" item2="Oranges" item3="Mangos" />,
+  document.getElementById('root')
+);
+However, groceryList() is still a function and not a component. Remember why? The reason is that you are still defining each of the items as parameters. You want to convert groceryList() into a component by having an object of props that will hold each of the items. The last thing you have to do to fully convert groceryList() into a component is to capitalize the first letter of the component. This is very important, and when writing a component, it is required that the first letter of the name is capitalized. When using HTML elements, they are always lowercase. Any React components created will always be uppercase because the easiest way for React to tell if it is not an HTML element and is a component is with capitalization. Great! Now check out how your code will look when using a component:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const GroceryList = props => {
+  return (
+    <ul>
+      <li>{props.item1}</li>
+      <li>{props.item2}</li>
+      <li>{props.item3}</li>
+    </ul>
+  );
+};
+
+ReactDOM.render(
+  <GroceryList item1="Apples" item2="Oranges" item3="Mangos" />,
+  document.getElementById('root')
+);
+The item, item2, and item3 properties of the GroceryList component in the render() call are automatically placed within the props parameter object. Each property specified in the render() call is accessed from props using a dot as shown above (e.g., props.item1).
+
+Try It!
+Add the above code to your index.js file in your starter project. Be sure the entire file looks like the above!
+
+Tip!
+Because there is only 1 parameter of props, you do not need to use parenthesis.
+
+Great work!
+
+Stateless Components
+The kind of component you have been working with is known as a Stateless Component. Components always have a single parameter, which is the props object, and returns a React element. A stateless component is a function and can only display what's in the props object that's passed in — there is no state that is maintained (like a class).
+
+But what if you have many components that need to be rendered? The purpose of the ReactDOM.render() function is to render the entire page. As most websites include many different elements on the page (i.e., header, some text, a form, footer), you need to be able to render each of those components that are responsible for the different elements. However, each component cannot be listed out within the ReactDOM.render() function. If that is the case, how do you render each of the components?
+
+The answer is simple: create a main component that contains the data and returns every component within your file. This way, you can render that one, main component and since it returns every other component, you will end up rendering every component you have created.
+
+Take a look at an example of using a main component to render another.
+
+Using a Main Component
+First, create your main component that you will call App, which is a standard name for the main component. App will just be a component that takes in props and returns any components created later on in the file. Consider below:
+
+const App = props => {
+  return(
+
+  )
+}
+
+ReactDOM.render(
+  <App/>,
+  document.getElementById('root');
+)
+Above, you created a component named App that takes in props and has a return statement. Then, you have the App component within the ReactDOM.render() method. As you create new components, you will not be updating the ReactDOM.render() method to show that: you will be updating the App component.
+
+Now, create another component that will allow you to add a name to a sentence.
+
+src/index.js file:
+
+const Hello = props => {
+  return (
+    <div>
+      <h1>Hello, {props.name}!</h1>
+    </div>
+  );
+};
+You can even take this a step further by removing the return statement and braces for a shorthand version. In the real world, this is the most common way to write a function that doesn't use any additional logic.
+
+src/index.js file:
+
+const Hello = props => (
+  <div>
+    <h1>Hello, {props.name}!</h1>
+  </div>
+);
+Now that you have a component, to render it, it needs to be called within the App component. It can be used directly or as a child, even multiple times. Your code would look like the code below if you wanted to use the function multiple times:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return (
+    <div>
+      <Hello name="Nikki" />
+      <Hello name="Michael" />
+      <Hello name="Andrew" />
+    </div>
+  );
+};
+
+const Hello = props => (
+  <div>
+    <h1>Hello, {props.name}!</h1>
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Try It!
+Add the above code to your index.js file in your React project. You should now see "Hello, Nikki!, "Hello, Michael!", and "Hello, Andrew!" in localhost:8080.
+
+As you progress through React and build applications, stateless components will comprise a vast majority of your applications. They allow you to remain organized and break larger functions into smaller functions that you can later rely on for performance optimizations and clean, concise, legible code.
+
+
+Prop Validation
+If you would like to ensure that only certain types of data are provided in the props of a component, you can do so by adding prop validation. It is similar to when you have an input field, and you want to make sure the user can input a number only and not a string. You would do so like <input type="number"/>. You can define the type you want for different fields within a prop.
+
+The first thing you will need to do is run the following command to install prop-types into your ReactL03 project:
+
+terminal/command line:
+
+npm install --save prop-types
+Caution!
+Be sure to be in your React directory!
+
+After it has installed into your project, add another import line importing the PropTypes library, like below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+// add the above line to your code
+Now that prop-types is within your project, move on!
+
+Example
+Take a look at a brand new example. Below is a list that renders an employee's information:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+const App = props => {
+  return (
+    <Employee name="Elizabeth" age={27} position="Sales Manager"/>
+  )
+}
+
+const Employee = props => (
+    <ul>
+      <li>{props.name}</li>
+      <li>{props.age}</li>
+      <li>{props.position}</li>
+    </ul>
+  );
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Now, say you want the name to be a string, the age to be a number and the position also to be a string. You would need to create an object that defines the types of each of the fields. To specify the types of your props simply define that you are using .propTypes on the component. Consider below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+const App = props => {
+  return (
+    <Employee name="Elizabeth" age={27} position="Sales Manager"/>
+  )
+}
+
+const Employee = props => (
+    <ul>
+      <li>{props.name}</li>
+      <li>{props.age}</li>
+      <li>{props.position}</li>
+    </ul>
+);
+
+Employee.propTypes = {
+  name: PropTypes.string,
+  age: PropTypes.number,
+  position: PropTypes.string
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Great! You have now set the propTypes for each of the list items to be either a string or a number.
+
+Tip!
+For performance reasons, propTypes is only checked in development mode.
+
+But wait! Want to take this a step further? You can also use Prop validation to specify whether a value is required or not. The above values are all not required, but you can change that by adding the isRequired property:
+
+src/index.js file:
+
+// ...
+
+Employee.propTypes = {
+  name: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
+  position: PropTypes.string
+};
+As you can see, you have now set the prop type for each of the inputs, along with setting the name and age to be required when rendering the list of clients.
+
+Additional Info!
+There are many different types that can be used with props. Strings, numbers, and functions are just a few. For additional prop types checkout the list: Typechecking with Proptypes:: https://reactjs.org/docs/typechecking-with-proptypes.html
+
+Default Prop Values
+As you begin to add prop validations, you may find situations where if a value doesn't exist for a field within the prop object, you will need a default value. This is very helpful in cases where, if you don't have that value, an error will be produced. This can be done very similarly to .propTypes by adding a .defaultProps onto your component.
+
+Go ahead and give the position value of your employee list a default value of employee. It would be added to the code like so:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+const App = props => {
+  return (
+    <Employee name="Elizabeth" age={27}/>
+  )
+}
+
+const Employee = props => (
+  <ul>
+    <li>{props.name}</li>
+    <li>{props.age}</li>
+    <li>{props.position}</li>
+  </ul>
+);
+
+Employee.propTypes = {
+  name: PropTypes.string.isRequired,
+  age: PropTypes.number.isRequired,
+  position: PropTypes.string
+}
+
+Employee.defaultProps = {
+  position: "employee"
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+All in all, propTypes and defaultProps are defined in the same way and help to alleviate any errors that might have occurred if they did not exist.
+
+Full PropTypes Example
+Using default props is a way to avoid the isRequired propType since there will always be a value by default so that it will meet the requirement.
+
+Below is a larger example of using propTypes and defaultProps. This example could be used to show the client's information on purchases from a company:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
+
+const App = props => {
+  const user = {
+    name: 'George Bailey',
+    address: '1122 Drafty House',
+    city: 'Bedford Falls',
+    state: 'New York',
+    zip: 13148
+  };
+  return <User person={user} items="Boots, Tie, Socks" amount={100} />;
+};
+
+const User = props => (
+  <ul>
+    <li>Name: {props.person.name}</li>
+    <ul>
+      <li>Address: {props.person.address}</li>
+      <li>City: {props.person.city}</li>
+      <li>State: {props.person.state}</li>
+      <li>Zip: {props.person.zip}</li>
+    </ul>
+    <li>Items: {props.items}</li>
+    <li>Paid: {String(props.paid)}</li>
+    <li>Amount: {props.amount}</li>
+    <li>Shipped: {String(props.shipped)}</li>
+  </ul>
+);
+
+User.propTypes = {
+  person: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    address: PropTypes.string.isRequired,
+    city: PropTypes.string.isRequired,
+    state: PropTypes.string.isRequired,
+    zip: PropTypes.number.isRequired,
+  }),
+  items: PropTypes.string.isRequired,
+  paid: PropTypes.bool,
+  amount: PropTypes.number.isRequired,
+  shipped: PropTypes.bool
+};
+
+User.defaultProps = {
+  paid: false,
+  shipped: false
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+As you can see, within the render, you are not defining the paid and shipped fields. Because of the defaultProps, those fields will automatically be filled in with false. The propTypes and defaultProps are not required, but can help you make sure your application functions the way you would expect it to.
+
+One thing to observe in the above code is the User.propTypes section. Since the App sets the person property of the User object to a plain JavaScript object (the constant user), the validation for the person property must be done differently. To validate a plain JavaScript object against a certain shape, you use the shape function of PropTypes, the sole argument to which is the propTypes definition for the object; in this case, the prop types of the person object.
+
+Also you will notice the use of the String() function to convert a boolean to a string in the User Component. A boolean value does not render in JSX so you have to convert it to a string so that it will display on your page.
+
+
+Producing JSX from Collections
+So far, you have been creating a component and then defining what info you want for the properties (or props). Now, say you have an array you would like to display, how would you go about it? The easiest and most straight-forward answer is to type it into HTML or JSX and call it a day. While this is possible, it is not the most efficient way to accomplish the task at hand.
+
+Rendering Data With A For Loop
+One way to accomplish this is to use a for loop to iterate over the array and display each element. Consider below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return <List items={listItems} />;
+};
+
+const items = ['Bread', 'Milk', 'Eggs', 'Tea'];
+
+const listItems = [];
+
+for (let i = 0; i < items.length; i++) {
+  listItems.push(<li key={i}>{items[i]}</li>);
+}
+
+const List = props => <ul>{props.items}</ul>;
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Above, you have an array of items that includes four items: Bread, Milk, Eggs, and Tea. You also have an empty array of listItems. Within your for loop, you iterate through the items array, and as the loop hits each item in the array, it then pushes that item into the listItems array as a <li> element. Notice that the <li> element has a key attribute. This is a special string attribute that is needed when creating lists of elements. In this case, you are setting the key to be the array item the loop is currently iterating over. Then, the ReactDOM.render() method renders the App component which then displays the listItems array.
+
+Additional Info!
+The key attribute is used by React to identify which items have been changed or removed, as well as when they're added.
+
+
+Producing JSX from Collections - Continued
+Rendering Data With The Map Function
+While the above works, it may not be the best approach because it adds unneeded steps. For example, you had to create a new array, listItems, and then push in each element within a loop after building the <li> element. That adds extra work for you.
+
+Instead, you can use the map() function of an array which accepts as its parameter a transformation function that is applied to each element in the array.
+
+The transformation function has three parameters:
+
+currentValue - Required. This is the current element in the array to be transformed.
+index - Optional. This is the index of current the element in the array to be transformed.
+array - Optional. This is the array upon which map is called.
+The transformation function applies its logic, transforming the current element as needed, and returns the transformed element as a new element — the original element is not changed.
+
+Consider the example below:
+
+src/index.js file:
+
+const items = ['Bread', 'Milk', 'Eggs', 'Tea'];
+
+const listItems = items.map(item => <li>{item}</li>);
+You can now plug in your variable items into your component, and your list will be displayed, as shown below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  const items = ['Bread', 'Milk', 'Eggs', 'Tea'];
+  return <List items={items} />;
+};
+
+const List = props => {
+  const listItems = props.items.map((item, index) => (
+    <li key={index}>{item}</li>
+  ));
+  return <ul>{listItems}</ul>;
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+When you are mapping over the items array, it returns another array of React.createElement() of each list item. Behind the scenes, this would look like below:
+
+const listItems = [
+  React.createElement('li', {}, 'Bread'),
+  React.createElement('li', {}, 'Milk'),
+  React.createElement('li', {}, 'Eggs'),
+  React.createElement('li', {}, 'Tea')
+];
+Tip!
+Notice the curly braces {} surrounding listItems? This is how to let React know you are going to be inserting JavaScript which includes variables, expressions, and calling functions.
+
+
+Producing JSX from Collections - Continued
+Rendering Objects With The Map Function
+You can extend this even further by mapping over an array of objects. Now, instead of only having the name of each of the items within the array, you have an object for each item that includes the name and the price. Below, you have the array of objects named items, a component named List that contains a constant listItems that maps over the items array and produces a list element of each of the objects within the array. Then, you are returning the variable that contains the list of items within the App component and finally rendering that list. Consider below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  const items = [
+    { name: 'Bread', price: 2.35 },
+    { name: 'Milk', price: 2.0 },
+    { name: 'Eggs', price: 3.15 },
+    { name: 'Tea', price: 4.0 }
+  ];
+
+  return <List items={items} />;
+};
+
+const List = props => {
+  const listItems = props.items.map((item, index) => (
+    <li key={index}>
+      {item.name}: {item.price}
+    </li>
+  ));
+
+  return <ul>{listItems}</ul>;
+};
+
+ReactDOM.render(<App />, document.getElementById('root'));
+As you can see above, the mapping function now lives within the component rather than outside, which means you have to define props.items.map(). This is more common practice: do some functionality within the component then return markup. You also want any data you are using to live within the main component. That way, all data is in one spot.
+
+Tip!
+Because you are doing some functionality before the returning of the markup, you need to use curly braces and then explicitly define the return statement.
+
+Multiple Components
+Consider what your file would look like with all components from this lesson:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  const items = [
+    { name: 'Bread', price: 2.35 },
+    { name: 'Milk', price: 2.0 },
+    { name: 'Eggs', price: 3.15 },
+    { name: 'Tea', price: 4.0 }
+  ];
+
+  return (
+    <div>
+      <List items={items} />
+      <Employee name="Elizabeth" age={27} position="Sales Manager" />
+      <GroceryList item1="Apples" item2="Oranges" item3="Mangos" />
+    </div>
+  );
+};
+
+const List = props => {
+  const listItems = props.items.map((item, index) => (
+    <li key={index}>
+      {item.name}: {item.price}
+    </li>
+  ));
+
+  return <ul>{listItems}</ul>;
+};
+
+const Employee = props => (
+  <ul>
+    <li>{props.name}</li>
+    <li>{props.age}</li>
+    <li>{props.position}</li>
+  </ul>
+);
+
+const GroceryList = props => (
+  <ul>
+    <li>{props.item1}</li>
+    <li>{props.item2}</li>
+    <li>{props.item3}</li>
+  </ul>
+);
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Above, there are four components: App, List, Employee, and GroceryList. The App component contains the data that is going to be passed into the following components. The data is presented as an array of objects that is passed into the List component. The data for the Employee and GroceryList components are passed directly within the return statement within the App component. Notice how all the components are located within one <div> element in the App's return() statement? This is needed because only one root HTML can be returned. Lastly, there is a ReactDOM.render() that contains the App component which will then add everything within the App component to the HTML element with the id of root.
+
+Try It!
+Add the above code to your file and see now how everything within the App component is added to the webpage.
+
+After adding the above code to your project, you should see three unordered lists like below:
+
+Bread: 2.35
+Milk: 2
+Eggs: 3.15
+Milk: 4
+
+Elizabeth
+27
+Sales Manager
+
+Apples
+Oranges
+Mangos
+
+
+Keyword	Description
+Component	Similar to a function, it takes in an object, props, rather than many parameters and returns HTML by using the props.
+Stateless Components	Components that have a single parameter, which is the props object, and returns a React element.
+Prop Validation	The ability to define what kinds of values are allowed for specific fields within a prop.
+Default Types	The ability to provide a default value for a field within a prop.
+Main Component	Contains the data and returns the HTML of every component within your file.
+
+
+
+
+
+
+
+
+
+

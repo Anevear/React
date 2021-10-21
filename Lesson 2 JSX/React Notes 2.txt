@@ -1,0 +1,570 @@
+Overview
+JavaScript XML (JSX) is a new syntax that can be used to make writing React.createElement feel more like writing HTML. JSX was created as part of React and is the primary way developers use it. JSX is converted to React.createElement through a process known as transpiling.
+
+Tip!
+Transpiling means taking code written in one language and transforming it into another, similar language. In your case, the JSX you write is transpiled into React createElement function calls.
+
+You will use JSX because it provides you with some familiar ground in this new library you are exploring, and it simplifies a significant amount of the code you write.
+
+
+
+
+JSX - Continued
+JSX Syntax for React.createElement
+Consider the React.createElement() statement below:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  React.createElement(
+    'div',
+    { className: 'flower' },
+    React.createElement('h1', {}, 'Hello World!')
+  ),
+  document.getElementById('root')
+);
+As you discovered, when using React.createElement(), you can achieve more complex HTML elements like lists and tables with nesting, but you sacrifice readability as they grow. For the example above, if you wanted to create the same <div> with a nested h1 that said 'Hello World!' in JSX it would look like this:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  <div className="flower">
+    <h1>Hello World!</h1>
+  </div>,
+  document.getElementById('root')
+);
+As you can see, the React.createElement() method no longer exists. Instead,the HTML code for creating the same element is added directly into the ReactDOM.render() method. This works because React takes the HTML code and transpiles it so it is read as React.createElement().
+
+Think of JSX as a shorthand for calling React.createElement(). This comes in handy when you explore larger blocks of HTML like lists and tables. Continue on to look at more examples of JSX.
+
+How JSX Works
+As noted earlier, JSX is transpiled or converted into usable JavaScript code. This is because JSX is not code that current web browsers can read, but JavaScript is. This transformation is handled for you by a tool. A common tool to use in this case is Babel. Babel takes care of converting the JSX code into JavaScript.
+
+What is Babel?
+Babel is a JavaScript compiler, and is frequently used with JSX. Babel is a set or sets of functions that add certain features to projects. In your case of using JSX, there is pre-written code behind the scenes that takes care of the conversion of the JSX code for you. It is important that it isn't magic behind the scenes; there is actual code other programmers have written to make your life easier.
+
+Setup
+Before you get any deeper into JSX, create a new project by following the below steps:
+
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named React.
+
+Starter Project
+
+Next, move the starter project folder to the FEFReact folder and rename it from React to ReactL02.
+
+Open up your command prompt/terminal.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Next, navigate to the SoftwareDevelopment directory in your terminal.
+
+cd SoftwareDevelopment
+Then, navigate to the FEFReact directory in your terminal.
+
+cd FEFReact
+Now, navigate to the ReactL02 directory in your terminal.
+
+cd ReactL02
+Now that you are in the ReactL02 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/React-Course/test/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Once npm has finished installing, you can test that the server is working with the following command:
+
+npm start
+You should now see your browser open up a blank page with an alert box saying "It's alive!".
+
+Tip!
+You can stop this process by pressing Control + C in the terminal, but for now, keep the server running.
+
+Add the necessary import statements at the top of the src/index.js file and remove the alert that currently lives in that file:
+import React from 'react';
+import ReactDOM from 'react-dom';
+Great! You are ready to get to work! Keep this project open and the server running so you can quickly test code within this lesson.
+
+Translating HTML to JSX
+Now that you have a general idea of how JSX transpiles HTML code to be read as React.createElement, now you will look at the examples from Lesson 1 and rewrite them with JSX.
+
+Unordered List in JSX
+Consider the unordered list of three different fruits you used in Lesson 1. Rendering this in HTML is a fairly straightforward task:
+
+index.html file:
+
+<ul>
+  <li>Apples</li>
+  <li>Oranges</li>
+  <li>Mangos</li>
+</ul>
+However, if you were to render this same list using React.createElement you would have to nest a series React.createElement calls within your ReactDOM.render method.
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  React.createElement(
+    'ul',
+    {},
+    React.createElement('li', {}, 'Apples'),
+    React.createElement('li', {}, 'Oranges'),
+    React.createElement('li', {}, 'Mangos')
+  ),
+  document.getElementById('root')
+);
+With JSX, you can minimize the additional code needed. All that is needed is to place the HTML code within the render method, as shown below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  <ul>
+    <li>Apples</li>
+    <li>Oranges</li>
+    <li>Mangos</li>
+  </ul>,
+  document.getElementById('root')
+);
+
+
+Translating HTML to JSX - Continued
+Nested Unordered List in JSX
+Now, how would you render your nested, unordered list of the fruits and their prices in JSX? You will just add the HTML code into the ReactDOM.render() method, like below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  <ul>
+    <li>Apples</li>
+    <ul>
+      <li>$1.00 per lb</li>
+    </ul>
+    <li>Oranges</li>
+    <ul>
+      <li>$.70 per lb</li>
+    </ul>
+    <li>Mangos</li>
+    <ul>
+      <li>$2.00 per lb</li>
+    </ul>
+  </ul>,
+  document.getElementById('root')
+);
+You are able to add any HTML code into the ReactDOM.render() method which will then be transpiled as a React.createElement() method.
+
+Try It!
+Convert the L01HandsOn from Lesson 1 to be JSX.
+
+Translating HTML to JSX - Continued
+Classes and Id's
+In Lesson 1, you learned how to set a class name within the React.createElement() method. Below is what it looks like using create Element. Remember, class is a keyword, so className must be used.
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  React.createElement(
+    'div',
+    {},
+    React.createElement('h1', { className: 'iAmAClassName' }, 'Hello World!')
+  ),
+  document.getElementById('root')
+);
+Below you'll find the conversion to JSX where className is still used:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  <div>
+    <h1 className="iAmAClassName">Hello World!</h1>
+  </div>,
+  document.getElementById('root')
+);
+Below is setting an id with a createElement verses JSX:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  React.createElement(
+    'div',
+    {},
+    React.createElement('h1', { id: 'iAmAnId' }, 'Good Morning!')
+  ),
+  document.getElementById('root')
+);
+vs.
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+ReactDOM.render(
+  <div>
+    <h1 id="iAmAnId">Good Morning!</h1>
+  </div>,
+  document.getElementById('root')
+);
+As you can see, it is much more efficient to write with JSX because you are writing HTML code within a render() method.
+
+Using Curly Braces
+You are not limited to static text; you can use any JavaScript value with your JSX by surrounding it with { and }. The {} in JSX signify inserting JavaScript including variables, JavaScript expressions, and calling functions.
+
+{ } with Variables
+Going back to the unordered fruit list, you can set each of the fruits to a variable and then call the name of the variable within {}, as shown below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const item1 = 'Apples';
+const item2 = 'Oranges';
+const item3 = 'Mangos';
+
+ReactDOM.render(
+  <ul>
+    <li>{item1}</li>
+    <li>{item2}</li>
+    <li>{item3}</li>
+  </ul>,
+  document.getElementById('root')
+);
+Try It!
+How would it look with the nested fruit list including their prices? Try it and see if you can figure it out! If you get stuck, the code is located below.
+
+Below is what it would look like using {} with the nested fruit list including their prices:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const item1 = 'Apples';
+const item1Price = '$1.00 per lb';
+const item2 = 'Oranges';
+const item2Price = '$.70 per lb';
+const item3 = 'Mangos';
+const item3Price = '$2.00 per lb';
+
+ReactDOM.render(
+  <ul>
+    <li>{item1}</li>
+    <ul>
+      <li>{item1Price}</li>
+    </ul>
+    <li>{item2}</li>
+    <ul>
+      <li>{item2Price}</li>
+    </ul>
+    <li>{item3}</li>
+    <ul>
+      <li>{item3Price}</li>
+    </ul>
+  </ul>,
+  document.getElementById('root')
+);
+
+
+>>>> you can set constants before the .render() with the reactDom. so the below IS a VALID bit of code:::
+
+const firstName = "Bob";
+const lastName = "Smith";
+const root = document.getElementById('root');
+
+ReactDOM.render(<div>{firstName} {lastName}</div>, root);
+
+
+Setting JSX to Variables
+Just like you can assign the result of React.createElement() to a variable, you can do the same with JSX. Instead of having the JSX code within the ReactDOM.render() method, you can set it to a variable and then use the variable within the ReactDOM.render() method. See below:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (
+    <ul>
+      <li>Apples</li>
+      <li>Oranges</li>
+      <li>Mangos</li>
+    </ul>
+);
+
+ReactDOM.render(
+  groceryList,
+  document.getElementById('root')
+);
+It would look the same with your nested fruit/price list:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (
+    <ul>
+      <li>Apples</li>
+        <ul>
+          <li>$1.00 per lb</li>
+        </ul>
+      <li>Oranges</li>
+        <ul>
+          <li>$.70 per lb</li>
+        </ul>
+      <li>Mangos</li>
+        <ul>
+          <li>$2.00 per lb</li>
+        </ul>
+    </ul>
+);
+
+ReactDOM.render(
+  groceryList,
+  document.getElementById('root')
+);
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (
+  <ul>
+    <li>Apples</li>
+    <ul>
+      <li>$1.00 per lb</li>
+    </ul>
+    <li>Oranges</li>
+    <ul>
+      <li>$.70 per lb</li>
+    </ul>
+    <li>Mangos</li>
+    <ul>
+      <li>$2.00 per lb</li>
+    </ul>
+  </ul>
+);
+
+ReactDOM.render(groceryList, document.getElementById('root'));
+
+
+Returning JSX From a Function
+You are not limited to setting the JSX code to only variables. You can create functions that produce React elements as well. See below:
+
+Example 1
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+function groceryList(item1, item2, item3) {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <li>{item2}</li>
+      <li>{item3}</li>
+    </ul>
+  );
+}
+
+ReactDOM.render(
+  groceryList('Apples', 'Oranges', 'Mangos'),
+  document.getElementById('root')
+);
+Above, you created a function, called groceryList, that takes in 3 parameters which then returns each of those items in an HTML unordered list. You then call the function groceryList and define each of the items.
+
+The above function is completely valid, but this is ES5 syntax. In real-world examples, you will most likely see ES6 rather than ES5.
+
+Example 2
+Below is what the above function will look like with ES6:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (item1, item2, item3) => {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <li>{item2}</li>
+      <li>{item3}</li>
+    </ul>
+  );
+};
+
+ReactDOM.render(
+  groceryList('Apples', 'Oranges', 'Mangos'),
+  document.getElementById('root')
+);
+Example 3
+Below is how it would look with your nested fruit list:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+function groceryList(item1, item1Price, item2, item2Price, item3, item3Price) {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <ul>
+        <li>{item1Price}</li>
+      </ul>
+      <li>{item2}</li>
+      <ul>
+        <li>{item2Price}</li>
+      </ul>
+      <li>{item3}</li>
+      <ul>
+        <li>{item3Price}</li>
+      </ul>
+    </ul>
+  );
+}
+
+ReactDOM.render(
+  groceryList(
+    'Apples',
+    '$1.00 per lb',
+    'Oranges',
+    '$.70 per lb',
+    'Mangos',
+    '$2.00 per lb'
+  ),
+  document.getElementById('root')
+);
+Example 4
+And in ES6:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const groceryList = (
+  item1,
+  item1Price,
+  item2,
+  item2Price,
+  item3,
+  item3Price
+) => {
+  return (
+    <ul>
+      <li>{item1}</li>
+      <ul>
+        <li>{item1Price}</li>
+      </ul>
+      <li>{item2}</li>
+      <ul>
+        <li>{item2Price}</li>
+      </ul>
+      <li>{item3}</li>
+      <ul>
+        <li>{item3Price}</li>
+      </ul>
+    </ul>
+  );
+};
+
+ReactDOM.render(
+  groceryList(
+    'Apples',
+    '$1.00 per lb',
+    'Oranges',
+    '$.70 per lb',
+    'Mangos',
+    '$2.00 per lb'
+  ),
+  document.getElementById('root')
+);
+Tip!
+Be sure to keep in mind that you will be using ES6 from now on! ES5 is still valid, but ES6 is used more widely.
+
+Key Terms
+Below is a list and short description of the important keywords you have learned in this lesson. Please read through and go back and review any concepts you don't understand fully. Great Work!
+
+Keyword	Description
+JSX	A new syntax for writing React.createElement and making it look and feel more like writing actual HTML code.
+Babel	A JavaScript compiler that converts JSX code to become React.createElement() code.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

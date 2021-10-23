@@ -1,8 +1,6 @@
-// Requirements
-// Add the code for the following requirements within the index.js file.
+// Requirements :: Add the code for the following requirements within the index.js file.
 
-// Step 1
-// Convert the given JavaScript into ES6 syntax using an arrow function and filter.
+// Step 1 Convert the given JavaScript into ES6 syntax using an arrow function and filter.
 
 const arr = [
    {"name":"chevy", "count": 2},
@@ -20,8 +18,7 @@ for(let i= 0; i < arr.length; i++){
 }
 console.log("Filter results:", newArr);
 
-// Step 2
-// Given the function, use the ES6 that was covered to combine the two arrays.
+// Step 2 Given the function, use the ES6 that was covered to combine the two arrays.
 
 const arr = ['Bill', 'Joe', 'Emily', 'Andrea']
 const newStudents = ['Andrew', 'Tasha', 'Carol', 'George'];
@@ -31,7 +28,6 @@ function addNewStudent(array, newArray) {
         array.push(newArray[i]);
     }
 }
+addNewStudent(arr, newStudents);
 
-// addNewStudent(arr, newStudents);
-// Tip!
-// You will need to use the spread operator!
+// Tip! ::: You will need to use the spread operator!

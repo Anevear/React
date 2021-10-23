@@ -1,0 +1,309 @@
+Overview
+When working with React, the ability to update components is generally handled by the state. Like in most other programming languages, the state contains all the information your program cares about. More often than not, user interaction within your application will update the state. In React, the state is handled by the component. This means if you need to pass data between components, you would have to wrap them in an outer component that would then handle the passing of the data by passing it to its children. While this is feasible, as an application grows, it becomes harder to manage as you nest components within each other endlessly. This is where the idea of a Single Application State in React becomes of importance. The best way to handle the state as an application grows is to use Redux. By using Redux, it makes managing the state simpler than trying to do it yourself. Before you jump into this, there are some concepts you need to understand.
+
+Single Application State - Continued
+Immutability
+Immutability is the inability to be updated or altered after creation. Although React does not require immutability, to treat various aspects of React as immutable can make your development efforts a lot simpler. When you know the current state of your application, it is easier to trace the flow of data. If the data is continually changing this can become extremely difficult, if not impossible. Immutability in React also often leads to performance boosts because it allows you, as the developer, to have complete control of when a re-render occurs. You don't want to rely on the application to determine the re-render, which would depend on the state of the potentially changing data.
+
+Although it is not explicitly enforced, it is strongly encouraged you never modify the state directly. With React, you will be using setState() to handle the changing of the state, as previously discussed. For example:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+class App extends React.Component {
+    constructor() {
+        super();
+        this.state = { comment: "Hi" };
+    }
+
+    changeComment() {
+       // Wrong
+        this.state.comment = 'Hello';
+
+        // Correct
+        this.setState({ comment: 'Hello' });
+    }
+
+    render() {
+        return (
+            <div>
+                <h2>{this.state.comment}</h2>
+                <button onClick={this.changeComment.bind(this)}>Change To Hello</button>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+If the comment property of the state is set to Hello directly, then the component will not update. But when you use the setState() method and pass a new state object to the method, the component will update with the new value.
+
+Tip!
+When setState() is used, it returns a new instance of the state's object rather than changing the previous object, therefore allowing the state to remain unchanged.
+
+Single Application State - Continued
+Pure Functions
+A function is Pure if when given the same input, it will always return the same output. So, the return value is only determined by the input values and not by observable side-effects. A "side effect" is any effect other than what you expect to be returned. Concretely, that means a pure function always returns the same result given the same parameters. Purity allows for your code to easily be understood and diagnosed due to having less or even no dependencies.
+
+For example, consider the following code:
+
+function sum(props) {
+  return props.a + props.b;
+}
+You can call the above sum function a pure function because it does not change the value of the inputs, and given the same inputs, it will return the same value. If you passed in 1 and 2, your sum function will always return 3. A function that tries to alter its input is impure and should not be used in React.
+
+Below is an example of an impure function:
+
+function travel(props) {
+  props.distance -= props.speed;
+}
+The above function is using the -= assignment operator which will subtract the props.speed from props.distance and re-assign props.distance to the difference. You do not want to use impure functions like this in React.
+
+Another example of a pure function is your previous "Hello, name!" example. While you can certainly provide different names to the function, given the same name, you will always get the same JSX output:
+
+const Hello = props => (
+  <div>
+    <h1>Hello, {props.name}!</h1>
+  </div>
+);
+
+ES6 Concepts Review
+Before learning Redux, it is important to fully understand some specific ES6 concepts that are frequently used in Redux. For this lesson, you will be reviewing concepts and learning new concepts. You will not need a starter project for this lesson's content. If you would like to try out any of the code in this lesson, please visit: https://jsbin.com/.
+
+Destructuring
+Destructuring is a convenient way of extracting multiple values from data stored in objects and arrays.
+
+Objects
+First, take a look at destructuring objects. Consider below:
+
+const obj = {
+  first: 'April',
+  last: 'Ludgate'
+};
+Using the above object, if you wanted to access each of the values, you could do so by referencing the keys:
+
+const first = obj.first;
+const last = obj.last;
+If you want to accomplish the same thing using destructuring, you can now access each of the values in one step:
+
+const { first, last } = obj;
+Next, you could also use this same principle to assign the values to new variables as well. A property can be unpacked from an object and assigned to a variable with a different name than the object property. Consider below:
+
+const { first: f, last: l } = obj;
+The above code is essentially short hand for:
+
+const f = obj.first;
+const l = obj.last;
+The object values are now accessible by the new variables you assigned:
+
+console.log(f);
+// Will log April
+
+console.log(l);
+// Will log Ludgate
+This can often be seen when importing dependencies into files as well. With your render() in React-DOM, there are two ways you could approach it.
+
+First, you can import it:
+
+import ReactDOM from 'react-dom';
+Then you could access it as shown below:
+
+ReactDOM.render(<h1>Hello, World!</h1>, document.getElementById('body'));
+The second destructured approach would look like below:
+
+import { render } from 'react-dom';
+And would be accessed as shown below:
+
+render(
+  <h1>Hello, World!</h1>,
+  document.getElementById('body')
+);
+Arrays
+The same principles you used with objects above can be applied to arrays as well.
+
+const array = ['a', 'b'];
+
+const [x, y] = array;
+The values of 'x' and 'y' are now 'a' and 'b' respectively.
+
+ES6 Concepts Review - Continued
+Spread Operator
+The spread operator (...) allows an expression to be expanded in places where multiple arguments, elements, or variables are expected. Spread can be used for functions calls, array literals, and object literals.
+
+Below, you are using spread to pass elements of an array as individual parameters to a function:
+
+const parameters = [4, 8, 2, 1, 6];
+
+const maxWithoutSpread = Math.max(
+  parameters[0],
+  parameters[1],
+  parameters[2],
+  parameters[3],
+  parameters[4]
+); // Returns 8
+
+const maxUsingSpread = Math.max(...parameters); // Returns 8
+Tip!
+The Math.max() function is used to return the maximum number, so in this case, it will return 8 since 8 is the largest number in the parameters array.
+
+Additionally, spreading parameters can be used along with more parameters:
+
+const maxUsingSpread = Math.max(...parameters, 9, -2); // Returns 9
+Below, spread is being used to make a copy of an array:
+
+const someNumbers = [5, 9, 21, 2];
+
+const newNumbers = [...someNumbers]; // returns [5, 9, 21, 2]
+Below, spread is being used to make a copy of an array and add new elements:
+
+const someNumbers = [5, 9, 21, 2];
+
+const newNumbers = [...someNumbers, 17]; // returns [5, 9, 21, 2, 17]
+The elements appear in the order you specify, so if you reverse the spread the original array's elements will come after your new elements:
+
+const someNumbers = [5, 9, 21, 2];
+
+const newNumbers = [17, ...someNumbers]; // [17, 5, 9, 21, 2]
+You can use the spread operator with objects as well. They can be copied in the same way as arrays:
+
+const person = {
+  name: 'Jess',
+  age: 42
+};
+
+const newPerson = { ...person }; // returns { name: "Jess", age: 42 }
+Adding or updating properties of objects is a bit different from adding elements to arrays. The reason for this is because each object can only have one of any property:
+
+const person = {
+  name: 'Jess',
+  age: 42
+};
+
+const newPerson = { ...person, name: 'Tyler' }; // { name: "Tyler", age: 42 }
+Since all the properties from the original person are spread out as individual properties in the new object, the last property defined "wins". This means you almost always want to spread the old object first, then put your new properties second otherwise the property from the original object will be used. Below, the name is defined first, and since the spread of the variable person is listed last, it will return the original name and not the new:
+
+const person = {
+  name: 'Jess',
+  age: 42
+};
+
+const newPerson = {
+  name: 'Tyler',
+  ...person
+}; // returns { name: "Jess", age: 42 }
+
+ES6 Concepts Review - Continued
+Filter
+The .filter() method of an array returns a new array with all elements that pass the test implemented by the provided function.
+
+Below, the function isEnough accepts a numeric value and returns whether that value is greater than or equal to 10 (it returns a boolean value). The constant filtered is set to the result of calling filter on the array of numbers, passing it the isEnough filtering function - only three out of the five values satisfy the condition.
+
+function isEnough(value) {
+  return value >= 10;
+}
+
+const filtered = [12, 5, 8, 130, 44].filter(isEnough);
+// filtered is equal to [12, 130, 44]
+
+Intro to Redux
+
+Now that you have reviewed the fundamental ES6 concepts used in Redux, you will explore what Redux is.
+
+Redux is a predictable state container for JavaScript apps. Redux helps you write applications that consistently behave the way you intend, run in different environments, and are easy to test.
+
+"Redux attempts to make state mutations predictable by imposing certain restrictions on how and when updates can happen." - Redux Documentation
+
+Below are the three main restrictions when updating:
+
+Single Source of Truth
+The state of your entire application lives within an object called a store
+State is Read-Only
+The state doesn't change unless an action occurs
+Changes are made with Pure Functions
+To specify how the state will change by using actions, pure reducers are used.
+As you can see, there are three new terms to be familiar with: store, action, and reducer.
+
+A store is an object that contains the state for your entire application. So far, you have looked at how to create a state for different components, but you haven't looked at where each of the states live. That place is the store.
+
+An action is information that sends data to the store. Actions are the only source of information for the store. They are plain JavaScript objects and always must contain a type field that defines the type of action being performed.
+
+A reducer specifies how an application's state changes based on an action sent to the store. This is needed because actions only describe that something happened to the state, but not how to change the state. A reducer is generally structured as a pure function that takes the previous state and an action, and returns the next state.
+
+When working in Redux, there is a general workflow you will see as you create applications and as you progress through the course you cover each of these. In the diagram below, you can see that the UI (interaction with the User Interface) triggers an action which is sent to the reducer that then updates the store which contains the state that handles the data shown on the page.
+
+Redux workflow flowchart. There are a series of connected boxes with arrows. Starting on the left, the box says store. The arrow leaving store reads re-render and goes to controller. Controller has an arrow that is labeled defines going to U I. U I has an arrow that reads triggers going to actions. Actions has an arrow labeled sent to and goes to reducer. Reducer has an arrow labeled updates that goes back to the box that says stores.Figure 7-1: Redux Workflow
+
+                                          |>|        Controller     |v|
+                    			  re-renders                     defines 
+                                    Store |^|                	           |v| UI
+					  updates 			 |v| triggers
+						|^| Reducer  <-sent to-- Actions
+
+
+Now that you have a general idea of what Redux does, time to look at some code and how it flows with the above workflow diagram.
+[{( CONTROLLER defines the UI which triggers ACTIONS which are sent to the REDUCER which updates the STORE which re-renders the CONTROLLER <in a one way loop>)}]
+
+Redux Workflow
+Refresh your memory on the Redux Workflow diagram:
+
+Redux workflow flowchart. There are a series of connected boxes with arrows. Starting on the left, the box says store. The arrow leaving store reads re-render and goes to controller. Controller has an arrow that is labeled defines going to U I. U I has an arrow that reads triggers going to actions. Actions has an arrow labeled sent to and goes to reducer. Reducer has an arrow labeled updates that goes back to the box that says stores.Figure 7-2: Redux Workflow
+
+Now you will explore what is needed for each of these things to work. You are going to look at an example of a number counter. In the next lesson, you will dive much deeper into what each of these parts are doing, so don't worry if you don't understand every code example. What is important here is that you understand how Redux works.
+
+UI to Action
+First, you can start with the UI view. The user is going to see a counter on their page, so if they click either the + or - buttons, the number will increase or decrease. A component called Counter handles this. Consider below:
+
+<Counter onClick={store.dispatch{type:'Increment'}}>
+Above, you have a Counter component with an onClick attribute that defines what the type of the action is. When the + button is clicked, this sends the type to the action. Below is where in the workflow this is happening:
+
+Redux workflow flowchart. There are a series of connected boxes with arrows. Starting on the left, the box says store. The arrow leaving store reads re-render and goes to controller. Controller has an arrow that is labeled defines going to U I. U I has an arrow that reads triggers going to actions. Actions has an arrow labeled sent to and goes to reducer. Reducer has an arrow labeled updates that goes back to the box that says stores. The boxes for U I and actions are highlighted.Figure 7-2: Redux Workflow
+
+The button is clicked on the user's interface which triggers an action.
+
+Action to Reducer
+Now that the action has been triggered, it needs to be handled. But what does an action look like? As stated previously, it is just a plain JS object and must have a type field. Somewhere in your code (more on this in the next lesson), the action is defined, shown below:
+
+{
+  type: 'Increment';
+}
+Now that the action has been triggered, it is sent to the reducer, which decides what to do with that action. The image below illustrates the current location within the workflow:
+
+Redux workflow flowchart. There are a series of connected boxes with arrows. Starting on the left, the box says store. The arrow leaving store reads re-render and goes to controller. Controller has an arrow that is labeled defines going to U I. U I has an arrow that reads triggers going to actions. Actions has an arrow labeled sent to and goes to reducer. Reducer has an arrow labeled updates that goes back to the box that says stores. The boxes for actions and reducer are highlighted.Figure 7-3: Redux Workflow
+
+Within the reducer function, there is a case statement like below:
+
+case 'Increment':
+      return {
+        count: state.count + 1
+      };
+In the case of Increment, take the state.count and add one.
+
+After this, the reducer sends the new information to the store which then re-renders the main component, completing the workflow diagram.
+
+Holding State
+When working with a reducer changing the state, some ES6 principles can be applied to hold state. The state is what holds all the information and data needed for your application. The previous section showed you what a reducer looks like using and altering the state. You want to protect this as much as possible so you do not accidentally change something you didn't mean to and ruin your application.
+
+When working in a Reducer and using the state, you always want to use the spread operator (...) to spread the state. So, within the Increment example, you are adding 1 to state.count. If you wanted to update the count in your state, you should do so in a way that protects it. Using the spread operator (...) is one way to accomplish this, as shown below:
+
+case 'Increment':
+      return {
+        ...state,
+        count: state.count + 1
+      };
+This way, you are capturing the state first and then altering it.
+
+Using the spread operator, you can create a new version of your state and protect your actual state from being changed without you knowing. This happens because when the spread operator is used, it will make a copy of the state rather than changing it directly. This is very good and common practice when working with React and Redux!
+
+If you are feeling like some parts are missing, you are correct! Remember, this workflow description is for your overall understanding of how Redux works, not the tiny details. You are going to build out this counter application with detailed explanations of each part in the next lesson. Great work!
+
+
+
+Keyword	Description
+Immutability	The inability to be updated or altered after creation.
+Pure Function	A function that when passed in a value, it will always return the same output.
+Destructuring	A way of extracting multiple values from data stored in objects and arrays
+Spread Operator	Allows an expression to be expanded in places where multiple arguments, elements, or variables are expected.
+.filter()	A method that creates a new array with all elements that pass the test implemented by the provided function.
+Store	An object that contains the state for an entire application.
+Action	Plain JavaScript objects that send data to the store and is the only source of information for the store. The must always contain a type field that defines what type of action is being performed.
+Reducer	Specifies how an application's state changes based on an action that was sent to the store. Describes how to change the state.
+

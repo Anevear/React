@@ -204,6 +204,22 @@ function isEnough(value) {
 const filtered = [12, 5, 8, 130, 44].filter(isEnough);
 // filtered is equal to [12, 130, 44]
 
+>>>the spread operator used in arrays can also be used w/ arguments for function calls and key-value pairs with objects
+
+>>>>>function printCoordinates(lat, long) {
+
+    return "Latitude: " + lat + ", Longitude: " + long;
+
+}
+
+const coordinate = [33.4484, 112.0740];
+
+console.log(printCoordinates(...coordinate));
+
+<<< the above cod *IS* a valid use of the spread operator
+
+>>> the .filter() method is used with arrays (a collection)
+
 Intro to Redux
 
 Now that you have reviewed the fundamental ES6 concepts used in Redux, you will explore what Redux is.

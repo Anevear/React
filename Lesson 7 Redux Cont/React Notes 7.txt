@@ -1,0 +1,344 @@
+Overview
+Now that you have an idea of the overall concepts of what Redux does, you are going to explore a code example that increments a number when a button is clicked. As you work through this example, don't worry too much about understanding every small detail within the code. It is essential to understand the general idea of how the state is handled when using Redux. Just be sure to add the code into the starter project (provided below) as you work through this section. During the next lesson, you will dive deeper into the code of Redux.
+
+
+Counter Setup
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named redux-counter.
+
+Starter Project
+
+After unzipping, move the starter project folder to the FEFReact folder located inside the SoftwareDevelopment folder and rename it from redux-counter to ReactL07.
+
+Open up your terminal/command prompt.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Next, navigate to the SoftwareDevelopment directory in your terminal.
+
+cd SoftwareDevelopment
+Then, navigate to the FEFReact directory in your terminal.
+
+cd FEFReact
+Navigate into the ReactL07 directory:
+
+cd ReactL07
+Now that you are in the ReactL07 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/React-Course/test/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Once npm has finished installing, you can test that the server is working with the following command:
+
+npm start
+You should now see your browser open up to the Redux Counter project.
+
+Tip!
+You can stop this process by pressing Control + C in the terminal, but for now, keep the server running.
+
+Counter that currently reads zero. There are buttons with plus and minus signs on either side of the zero.Figure 8-1: React Counter
+
+What you have in this project is a plain React project that increments or decrements the number shown depending on which button you click. If you click either button, the number in the middle should correspond to which button was clicked.
+
+Now that you have seen the increment/decrement counter working in plain React, you can convert it to be a Redux counter. Before starting, remove the state from your Counter component in your src/Counter.js file so your code now looks like the below:
+
+import React from 'react';
+
+class Counter extends React.Component {
+  increment = () => {
+    // fill in later
+  };
+
+  decrement = () => {
+    // fill in later
+  };
+
+  render() {
+    return (
+      <div>
+        <h2>Counter</h2>
+        <div>
+          <button onClick={this.decrement}>-</button>
+          <span>{this.props.count}</span>
+          <button onClick={this.increment}>+</button>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Counter;
+Caution!
+Make sure to change {this.state.count} to {this.props.count}! This won't work just yet, because the Counter component is not yet receiving a count prop. You will be using Redux to help with that!
+
+
+Counter - Continued
+Now that you have the project set up, time to start adding in Redux itself!
+
+Connect to Redux
+To be able to use Redux, you must connect to it, using the connect function. You do this by using an import statement. Add the below to the top of your Counter.js:
+
+import React from 'react';
+import { connect } from 'react-redux';
+The next thing you need to do is connect the Counter component to Redux at the bottom of the file. Underneath your function, add the following code:
+
+// Add the below function:
+function mapStateToProps(state) {
+  return {
+    count: state.count
+  };
+}
+
+// Replace this:
+// export default Counter;
+
+// With this:
+export default connect(mapStateToProps)(Counter);
+What is Connect?
+If you refresh your page, you will get an error. Before you explore the error in detail, what is connect? As you can see, the export default connect(mapStateToProps)(Counter); line looks a little weird. The reason for this is because connect is what you would call a Higher-Order Function. Higher-Order Functions are functions that return another function when called.
+
+In this example when connect is called, you are passing it the mapStateToProps function, and connect returns another function. This function returned by connect then needs to be called. So the second set of parentheses is calling that returned function and passing it an argument of Counter. That argument is the component that you want to assign state values to as props.
+
+In total, what connect is doing in your example is hooking into Redux, pulling out the entire state object from the store and passing it to the mapStateToProps function. Then the mapStateToProps function returns just the values the Counter component will need as props. Finally connect sends those values returned by mapStateToProps to the Counter component.
+
+Error Message
+After refreshing your webpage, you will see the below error in your console:
+
+Could not find "store" in either the context or props of "Connect(Counter)". Either wrap the root component in a <Provider>, or explicitly pass "store" as a prop to "Connect(Counter)".
+So far, you have not set up a store within your application. Since connect requires a store to work, this error is very sensible. Redux currently has no idea what is going on. Continue on to fix this error!
+
+Counter - Continued
+Now that you have connected your project to Redux, you are currently getting an error because you do not have a store. Well, you can provide and create the store now!
+
+Provide a Store
+The next thing you want to do is add the Provider component from react-redux to the App component. This way, every component will be able to use connect to access the Redux store. The Provider component essentially provides a way to add data to the entire component tree's context, so every child component has access to it.
+
+Within the src/index.js file, import Provider along with replacing the <div> tag with <Provider>. Your entire file should now look like below:
+
+import React from 'react';
+import { render } from 'react-dom';
+import Counter from './Counter';
+import { Provider } from 'react-redux';
+
+const App = () => (
+  <Provider>
+    <Counter />
+  </Provider>
+);
+
+render(<App />, document.getElementById('root'));
+If you return to localhost:8080, you will still be getting an error in your console. That is because you do not have an actual store, just the ability to access it.
+
+Create the Store
+To create the store, Redux provides a function that handles just that. It is called createStore. Time to create a store and pass it to Provider:
+
+import React from 'react';
+import { render } from 'react-dom';
+import Counter from './Counter';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+const store = createStore();
+
+const App = () => (
+  <Provider store={store}>
+    <Counter />
+  </Provider>
+);
+
+render(<App />, document.getElementById('root'));
+Now, if you refresh your page, you should be getting different error in your console:
+
+Expected the reducer to be a function.
+You might have expected that since you created the store, there would be a default value for the state within the store, like an empty object. That is not the case. Redux makes zero assumptions on the shape of your state. Because of this, you must provide a function that returns the state. This function is a reducer.
+
+
+
+
+Counter - Continued
+Reducer
+Below, there is an empty reducer function that is then passed into the createStore function.
+
+import React from 'react';
+import { render } from 'react-dom';
+import Counter from './Counter';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+function reducer() {
+  // leave this blank for now
+  // which is the same as `return undefined;`
+}
+
+const store = createStore(reducer);
+
+const App = () => (
+  <Provider store={store}>
+    <Counter />
+  </Provider>
+);
+
+render(<App />, document.getElementById('root'));
+Now, you are getting a different error:
+
+Cannot read property 'count' of undefined
+The reason for this is because you are trying to access state.count but state is undefined since you took it out of the Counter component. Your reducer() function is where you want to add your state. Edit the reducer() function so it looks like below:
+
+function reducer() {
+  return {
+    count: 4
+  };
+}
+Great! Finally, you aren't getting any errors in the console and you can see 4 on the counter. However, the counter does not actually work, yet. This is where actions come into play.
+
+
+
+
+Counter - Continued
+Now that you have created the store and reducer, you need an action to pass in.
+
+Action
+The action is what is going to handle the increasing or decreasing of the counter. It is an object that includes a required type property. You want to add the increment and decrement actions to your Counter component so that the numbers will change. To do this, you are going to use the dispatch() function provided by the instance of the Redux store. Luckily, when you import the connect function, it also injects the dispatch function as a prop. This dispatch function will hold the action. First, you need to add a switch/case statement within your reducer() function. This will decide what happens to the state. You are going to create a new variable that handles the state called initialState. Add the extra code so your reducer() function looks like the below:
+
+index.js file:
+
+const initialState = {
+  count: 0
+};
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return {
+        count: state.count + 1
+      };
+    case 'DECREMENT':
+      return {
+        count: state.count - 1
+      };
+    default:
+      return state;
+  }
+}
+Below is what your Counter function should now look like with dispatch and the actions:
+
+Counter.js file:
+
+class Counter extends React.Component {
+  increment = () => {
+    this.props.dispatch({
+      type: 'INCREMENT'
+    });
+  };
+
+  decrement = () => {
+    this.props.dispatch({
+      type: 'DECREMENT'
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <h2>Counter</h2>
+        <div>
+          <button onClick={this.decrement}>-</button>
+          <span>{this.props.count}</span>
+          <button onClick={this.increment}>+</button>
+        </div>
+      </div>
+    );
+  }
+}
+Great! Save your work and refresh the page. Your counter should now be working.
+
+
+
+
+Counter - Continued
+Reset Counter
+What if you want a button that resets the count to 0 when clicked? You would need a few things: Another case statement, a reset function and a button that calls the reset function.
+
+Try It!
+Before reading on, try adding this code yourself! If you can't quite get it, the code is located below.
+
+Within your index.js file, you would need to add another case statement that will set the count to 0 when met. Your reducer() function will now look like the below:
+
+index.js file:
+
+function reducer(state = initialState, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return {
+        count: state.count + 1
+      };
+    case 'DECREMENT':
+      return {
+        count: state.count - 1
+      };
+    case 'RESET':
+      return {
+        count: 0
+      };
+    default:
+      return state;
+  }
+}
+Next, add a reset() function within the Counter component. This will use the dispatch() method like your increment and decrement functions. Also, add a button that calls this.reset within its onClick. Your Counter component should now look like below:
+
+Counter.js file:
+
+class Counter extends React.Component {
+  increment = () => {
+    this.props.dispatch({
+      type: 'INCREMENT'
+    });
+  };
+
+  decrement = () => {
+    this.props.dispatch({
+      type: 'DECREMENT'
+    });
+  };
+
+  reset = () => {
+    this.props.dispatch({
+      type: 'RESET'
+    });
+  };
+
+  render() {
+    return (
+      <div>
+        <h2>Counter</h2>
+        <div>
+          <button onClick={this.decrement}>-</button>
+          <span>{this.props.count}</span>
+          <button onClick={this.increment}>+</button>
+          <br />
+          <button onClick={this.reset}>Reset</button>
+        </div>
+      </div>
+    );
+  }
+}
+After adding this code, you should now be able to reset your counter! Great work!
+
+Try It!
+For a real world example of using Redux there is a workshop for making a "To Do List" with a companion instructor led video located here. It is HIGHLY encouraged that you try it.
+
+
+
+
+Key Terms
+Below is a list and short description of the important keywords you have learned in this lesson. Please read through and go back and review any concepts you don't understand fully. Great Work!
+
+Keyword	Description
+Redux	A predictable state container for JavaScript apps.
+Higher Order Function	A function that takes a function as an argument, or returns a function.
+
+
+
+
+

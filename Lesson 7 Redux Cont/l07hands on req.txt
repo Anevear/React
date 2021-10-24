@@ -1,0 +1,60 @@
+
+Lesson 7 Hands-On45 points
+Directions
+For your Lesson 7 Hands-On, you will be working with the Redux Counter project you created in this lesson. However, you will be provided a fresh copy of this project for this Hands-On. This Hands-On will be graded, so be sure you complete all requirements.
+
+Caution!
+Do not submit your project until you have completed all requirements! You will not be able to resubmit.
+
+Setup
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named redux-counter.
+
+Starter Project
+
+After unzipping, move the starter project folder to the FEFReact folder located inside the SoftwareDevelopment folder and rename it from redux-counter to L07HandsOn.
+
+Open up your terminal/command prompt.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Next, navigate to the SoftwareDevelopment directory in your terminal.
+
+cd SoftwareDevelopment
+Then, navigate to the FEFReact directory in your terminal.
+
+cd FEFReact
+Navigate into the L07HandsOn directory:
+
+cd L07HandsOn
+Now that you are in the L07HandsOn directory, run the following:
+
+npm install
+Once npm has finished installing, you can test that the server is working with the following command:
+
+npm start
+You should now see your browser open up to the Redux Counter project.
+
+Tip!
+You can stop this process by pressing Control + C in the terminal, but for now, keep the server running.
+
+Requirements
+Within your Redux Counter project, you will be adding functionality and code while keeping the current code the same.
+
+Step 1
+Create two more buttons: one that will increment the number by 5 and one that will decrement the number by 10.
+You will need two more actions and case statements to handle this.
+Step 2
+Make it clear on the page what each button is doing. It should look similar to the example below.
+Example
+Counter that currently reads zero. There are buttons under it that read increase by 1, increase by 5, decrease by 1, decrease by 10, and reset.
+
+Additional Info!
+Watch a workshop recording very similar to this Hands On: Front End Frameworks React - Lesson 7 - Redux Continued.
+
+Caution!
+Be sure to zip and submit your entire L07HandsOn directory when finished!
+
+Drop files to upload, or click to browse.
+No file chosen
+Submit Project

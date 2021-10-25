@@ -14,9 +14,17 @@ function reducer(state = initialState, action) {
       return {
         count: state.count + 1
       };
+    case 'Increment5':
+      return{
+        count: state.count + 5
+      };
     case 'Decrement':
       return {
         count: state.count - 1
+      };
+    case 'Decrement1':
+      return{
+        count: state.count - 10
       };
     case 'Reset':
       return {

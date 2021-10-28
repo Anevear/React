@@ -2,6 +2,13 @@ import React from 'react';
 import { render } from 'react-dom';
 
 class List extends React.Component {
+         shouldComponentUpdate(nextProps){
+                  if (this.props.items !== nextProps.items){
+                           return true;
+                  } else {
+                           return false;
+                  }
+         }
          render() {
                   console.log("List's render function"); // this should not be logged multiple times if the exact same props are provided a second time
                   const list = this.props.items.map(item => (<li key={item}>{item}</li>));
@@ -19,8 +26,8 @@ const list2Items = ['Trains', 'Planes', 'Automobiles'];
      
 const renderItems = (items) => {
          render(
-         <List items={items} />,
-         document.getElementById('root')
+                  <List items={items} />,
+                  document.getElementById('root')
          );
 }
      

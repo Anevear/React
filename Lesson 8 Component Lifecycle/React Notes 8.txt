@@ -1,0 +1,726 @@
+Overview
+By using class-based components that inherit from React.Component, it allows you access to special functions that React calls Lifecycle Methods.
+
+Tip!
+Method is the name used for a function that performs an action on an object. Methods are still functions, but generally rely on use of the this keyword.
+
+Lifecycle Methods allow you to perform actions at various times with the DOM. If the method is prefixed with will, that means it will be called right before something happens. If they are prefixed with did, they will be called right after something happens. There is one additional prefix should that allows you to control if an action should take place.
+
+After the prefix, there are a series of categories theses methods fall under:
+
+Mounting - When an instance of a component is created and then inserted into the DOM, this is called Mounting and the following methods are called:
+
+constructor()
+componentWillMount()
+render()
+componentDidMount()
+Updating - If an update is triggered by changes to props or state, this is called Updating. The component will then need to be re-rendered which is when the following methods are called:
+
+componentWillReceiveProps()
+shouldComponentUpdate()
+componentWillUpdate()
+render()
+componentDidUpdate()
+Unmounting - When a component is removed from the DOM. The following method is called when a component is being removed from the DOM:
+
+componentWillUnmount()
+Additional Info!
+If you would like to read more about Lifecycle Methods, please visit: https://reactjs.org/docs/react-component.html.
+
+
+
+Lifecycle Methods - Continued
+Setup
+Before you get any deeper into Lifecycle Methods, create a new project by following the below steps:
+
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named React.
+
+Starter Project
+
+Next, move the starter project folder to the FEFReact folder and rename it from React to ReactL08.
+
+Open up your terminal/command prompt.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Next, navigate to the SoftwareDevelopment directory in your terminal.
+
+cd SoftwareDevelopment
+Then, navigate to the FEFReact directory in your terminal.
+
+cd FEFReact
+Now, navigate to the ReactL08 directory in your terminal.
+
+cd ReactL08
+Now that you are in the ReactL08 directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/React-Course/test/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Once npm has finished installing, you can test that the server is working with the following command:
+
+npm start
+You should now see your browser open up a blank page with an alert box saying "It's alive!".
+
+Tip!
+You can stop this process by pressing Control + C in the terminal, but for now, keep the server running.
+
+Add the necessary import statements at the top of the src/index.js file and remove the alert that currently lives in that file:
+import React from 'react';
+import ReactDOM from 'react-dom';
+Great! You are ready to get to work! Keep this project open and the server running so you can easily test code within this lesson.
+
+
+
+Lifecycle Methods Examples
+Adding the BankAccount Component
+For these examples, you will want to add the below BankAccount component code into your ReactL08 project:
+
+src/index.js file:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const App = props => {
+  return <BankAccount />;
+};
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accountBalance: 2222.22,
+      addAmount: 0
+    };
+  }
+
+  increment() {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <input
+          type="number"
+          onChange={event => this.setState({ addAmount: event.target.value })}
+          value={this.state.addAmount}
+        />
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+Great! Time to get started with these lifecycle methods!
+
+
+
+Lifecycle Methods Examples - Continued
+render()
+First, go ahead and add a console.log() to the render() method to see that your component is being rendered within the console. Add a console.log to your render() method so it looks like below:
+
+src/index.js file:
+
+render() {
+  console.log("Rendered!");
+  return (
+      <div>
+      <h3>Account Balance: ${this.state.accountBalance}</h3>
+      <input type="number" onChange={event => this.setState({ addAmount: event.target.value})} value={this.state.addAmount}/>
+      <button onClick={this.increment.bind(this)}>
+          Increase Amount
+      </button>
+      </div>
+  );
+}
+Now, go to localhost:8080 and open up the DevTools. When the page is reloaded, you should now see Rendered! in the console like below:
+
+Screen showing an account balance of two thousand two hundred twenty two dollars and twenty two cents. Under it is a text box and a button that says increase account balance. On the other side of the screen are some menu items and the text rendered index j s: js: 153.Figure 5-1: render
+
+And any time you either change the input's value or click the button, that message will show again because the page has been re-rendered.
+
+componentWillMount()
+Next, add the componentWillMount() method with a console.log, like below:
+
+src/index.js file:
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accountBalance: 2222.22,
+      addAmount: 0
+    };
+  }
+  componentWillMount() {
+    console.log('componentWillMount');
+  }
+  increment() {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
+    });
+  }
+
+  render() {
+    console.log('Rendered!');
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <input
+          type="number"
+          onChange={event => this.setState({ addAmount: event.target.value })}
+          value={this.state.addAmount}
+        />
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+This console.log will show up in the console before it is rendered because it is showing you that the component is going to be created and inserted into the DOM. You should now see the below:
+
+Screen showing an account balance of two thousand two hundred twenty two dollars and twenty two cents. Under it is a text box and a button that says increase account balance. On the other side of the screen are some menu items and the text rendered index j s: js: 158 and componentwillmount j s 148.Figure 5-2: componentWillMount
+
+componentDidMount()
+This method will tell you that the React element was created and inserted into the DOM correctly. Add this method to your code like below:
+
+src/index.js file:
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accountBalance: 2222.22,
+      addAmount: 0
+    };
+  }
+
+  componentWillMount() {
+    console.log('componentWillMount');
+  }
+
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+
+  increment() {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
+    });
+  }
+
+  render() {
+    console.log('Rendered!');
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <input
+          type="number"
+          onChange={event => this.setState({ addAmount: event.target.value })}
+          value={this.state.addAmount}
+        />
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+You should now see the below:
+
+Screen showing an account balance of two thousand two hundred twenty two dollars and twenty two cents. Under it is a text box and a button that says increase account balance. On the other side of the screen are some menu items and the text rendered index j s: js: 159 and componentwillmount j s 146 and componentdidmount j s 149.Figure 5-3: componentDidMount
+
+Notice how in your code the console.logs are in a different order than what is shown in your dev tools? That is because these are React-specific methods and React knows the order of mounting and rendering. That means, the order is: the component will mount, the component has been rendered and mounted.
+
+componentDidUpdate()
+Now, add the componentDidUpdate() method within the component along with a console.log, like below:
+
+src/index.js file:
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accountBalance: 2222.22,
+      addAmount: 0
+    };
+  }
+  componentWillMount() {
+    console.log('componentWillMount');
+  }
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+  componentDidUpdate() {
+    console.log('The component updated!');
+  }
+  increment() {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
+    });
+  }
+
+  render() {
+    console.log('Rendered!');
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <input
+          type="number"
+          onChange={event => this.setState({ addAmount: event.target.value })}
+          value={this.state.addAmount}
+        />
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+This will provide a console message that when the component was re-rendered, it was updated.
+
+
+
+Lifecycle Methods Examples - Continued
+shouldComponentUpdate()
+Time to look at an example that uses the shouldComponentUpdate() method. Return to the previous example of increasing your bank account by a number inputted.
+
+The ability to add user input is essential to development, but the way you have your component right now, it will always re-render when you click your button whether there is a change or not. You could use shouldComponentUpdate() to prevent this from happening.
+
+Right now, if the value of the input is 0, nothing is being changed when the button is clicked. If you look in the console, every time you click it, it is re-rendered:
+
+Screen showing an account balance of two thousand two hundred twenty two dollars and twenty two cents. Under it is a text box and a button that says increase account balance, which is highlighted. . On the other side of the screen are some menu items and the text rendered index j s: js: 169 and componentwillmount j s 156, componentdidmount j s 159, and another rendered that has a 14 before it and a j s: 169.Figure 5-4: re-rendered
+
+You don't want this to happen. You only want it to re-render when either or both of the fields in the state object change.
+
+Add the shouldComponentUpdate() method, like below:
+
+src/index.js file:
+
+class BankAccount extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      accountBalance: 2222.22,
+      addAmount: 0
+    };
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.state.addAmount !== nextState.addAmount) {
+      return true;
+    }
+    if (this.state.accountBalance !== nextState.accountBalance) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  componentWillMount() {
+    console.log('componentWillMount');
+  }
+  componentDidMount() {
+    console.log('componentDidMount');
+  }
+  componentDidUpdate() {
+    console.log('The component Updated!');
+  }
+  increment() {
+    this.setState({
+      accountBalance: this.state.accountBalance + parseInt(this.state.addAmount)
+    });
+  }
+
+  render() {
+    console.log('Rendered!');
+    return (
+      <div>
+        <h3>Account Balance: ${this.state.accountBalance}</h3>
+        <input
+          type="number"
+          onChange={event => this.setState({ addAmount: event.target.value })}
+          value={this.state.addAmount}
+        />
+        <button onClick={this.increment.bind(this)}>Increase Amount</button>
+      </div>
+    );
+  }
+}
+Above, you now have a shouldComponentUpdate() method that has if statements. The first if statement is saying that is the state.addAmount is not equal to the nextState.addAmount, re-render the page by return true;. Returning true from shouldComponentUpdate tells React to go ahead and render this component. The same thing goes for the state.accountBalance. Now, if you have a value of 0 within the input field, and you click the button, it won't be re-rendered because nothing is changing, but if you add a value to the field, it will re-render because you are changing the accountBalance value.
+
+
+
+Synchronous vs. Asynchronous
+Now that you have an idea of how to handle the state within React, it is essential to know the difference between synchronous and asynchronous. Synchronous means that certain actions (like pushing an element into an array) will happen one right after another, not at the same time. Your code runs so quickly that it seems like everything happens at the same time, but in fact, it does not. Asynchronous, however, is code that is run alongside other code. It doesn't necessarily run all at the same time, but allows the code to be started, paused, resumed, and completed as needed. This is useful for when you have some code that takes longer to complete and could potentially hold up the rest of your application and cause the browser to be unresponsive.
+
+setState() is Asynchronous
+Up until now, you have learned about the setState() function which updates your local state. When using this.props and this.state, they may be updated asynchronously, or at the same time. If this is the case, be careful not to rely on the values of props or state for calculating the next state.
+
+For example, if you called setState like below, it may fail to actually update the counter:
+
+// Wrong
+this.setState({
+  counter: this.state.counter + this.props.increment
+});
+Instead of using the above code, you can have setState take in a function, rather than an object. The below code will take in the previous state (prevState) as the first parameter and the props as the second which will be used at the time of the actual update:
+
+// Correct
+this.setState((prevState, props) => ({
+  counter: prevState.counter + props.increment
+}));
+It is important to understand that you need to be careful when using setState because if misused, your application may not work. You are allowed to set state multiple times in your application, but be careful not to rely on the values of this.state and this.props because they may be updated at the same time.
+
+You will be diving deeper into asynchronous calls later on in this course. For now, be aware that things can happen at the same time rather than one after another.
+
+
+
+Using an API for State
+Now that you have an idea of how to manage state within React, you can go out and fetch some data from an API and use that data as your state. You want to fetch this data and use it asynchronously so your application will still work even if the data hasn't been fetched yet.
+
+Be sure to follow along the walkthrough and add the code to your project when asked.
+
+Start off by downloading the starter project and unzipping it. The starter project will be in a folder named React.
+
+Starter Project
+
+Next, move the starter project folder to the FEFReact folder and rename it from React to ReactAPI.
+
+Open up your terminal/command prompt.
+
+Run the following to navigate to your Desktop
+
+cd Desktop
+Next, navigate to the SoftwareDevelopment directory in your terminal.
+
+cd SoftwareDevelopment
+Then, navigate to the FEFReact directory in your terminal.
+
+cd FEFReact
+Now, navigate to the ReactAPI directory in your terminal.
+
+cd ReactAPI
+Now that you are in the ReactAPI directory, run the following:
+
+npm install
+Caution!
+If you are getting this error saveError ENOENT: no such file or directory, open '/Users/username/Desktop/React-Course/test/package.json, that means you are not in the correct directory with a package.json file. Please follow steps 4-7 to make sure you are in the correct directory.
+
+Once npm has finished installing, you can test that the server is working with the following command:
+
+npm start
+You should now see your browser open up a blank page with an alert box saying "It's alive!".
+
+Tip!
+You can stop this process by pressing Control + C in the terminal, but for now, keep the server running.
+
+Fetching API in React
+For this section, you are going to learn how to fetch information from your Github account using their API. Your goal is to be able to see your GitHub profile picture, your name, how many followers and repositories you have, as well as how many people you are following. Time to get started!
+
+First, import the render method at the top of your src/index.js file so it looks like below.
+
+import React from 'react';
+import { render } from 'react-dom';
+Next, you need to create a constant named API. It will be set to the GitHub API link, so it is easily accessible throughout your file.
+
+const API = 'https://api.github.com/users';
+Next, create the component App:
+
+class App extends React.Component {}
+The next thing needed is the constructor that takes in props and will then define the state. Add the following within the App component:
+
+constructor(props) {
+    super(props)
+    this.state = {
+      username: 'yourUsername',
+      name:'',
+      avatar:'',
+      location:'',
+      repos:'',
+      followers: '',
+      following:'',
+      homeUrl:'',
+      notFound:''
+    }
+  }
+Tip!
+Replace 'yourUsername' with your own GitHub username within the username: field.
+
+Next, you are going to add the code for actually fetching the data and defining what to do with that data by using setState().
+
+fetchProfile(username) {
+    let url = `${API}/${username}`;
+    fetch(url)
+        .then((res) => res.json() )
+        .then((data) => {
+          this.setState({
+            username: data.login,
+            name: data.name,
+            avatar: data.avatar_url,
+            location: data.location,
+            repos: data.public_repos,
+            followers: data.followers,
+            following: data.following,
+            homeUrl: data.html_url,
+            notFound: data.message
+          })
+        })
+        .catch((error) => console.log('Oops! . There Is A Problem'))
+}
+Don't worry if you do not quite understand all of the above code, as you will be exploring these parts in depth in the next lesson.
+The next thing that is needed is the componentDidMount() method that calls the fetchProfile() method that you created in step 5. This will use the state's username as the username needed in the fetchProfile() method.
+
+You now need a render method within your App component so the user can see all of this information on the page. It is returning the Profile component, which you will create next.
+
+render() {
+    return (
+        <div>
+          <section id="card">
+            <Profile data={this.state} />
+          </section>
+        </div>
+    )
+}
+Next, create the Profile component. Add the following code below the App component.
+
+class Profile extends React.Component {
+  render() {
+    let data = this.props.data;
+    let followers = `${data.homeUrl}?tab=followers`;
+    let repositories = `${data.homeUrl}?tab=repositories`;
+    let following = `${data.homeUrl}?tab=following`;
+    return (
+      <section className="github--profile">
+        <div className="github--profile__info">
+          <a
+            href={data.homeUrl}
+            target="_blank"
+            title={data.name || data.username}
+          >
+            <img src={data.avatar} alt={data.username} />
+          </a>
+          <h2>
+            <a href={data.homeUrl} title={data.username} target="_blank">
+              {data.name || data.username}
+            </a>
+          </h2>
+        </div>
+        <div className="github--profile__state">
+          <ul>
+            <li>
+              <a href={followers} target="_blank" title="Number Of Followers">
+                <i>{data.followers}</i>
+                <span>Followers</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={repositories}
+                target="_blank"
+                title="Number Of Repository"
+              >
+                <i>{data.repos}</i>
+                <span>Repository</span>
+              </a>
+            </li>
+            <li>
+              <a href={following} target="_blank" title="Number Of Following">
+                <i>{data.following}</i>
+                <span>Following</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    );
+  }
+}
+This code will be handling the rendering of the actual information that was fetched and added to your state.
+Lastly, add the render() method to render the main component, App:
+
+render(<App />, document.getElementById('root'));
+Your src/index.js file should now look like the following:
+
+import React from 'react';
+import { render } from 'react-dom';
+
+const API = 'https://api.github.com/users';
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: 'yourUsername',
+      name: '',
+      avatar: '',
+      location: '',
+      repos: '',
+      followers: '',
+      following: '',
+      homeUrl: '',
+      notFound: ''
+    };
+  }
+  fetchProfile(username) {
+    let url = `${API}/${username}`;
+    fetch(url)
+      .then((res) => res.json() )
+        .then((data) => {
+        this.setState({
+          username: data.login,
+          name: data.name,
+          avatar: data.avatar_url,
+          location: data.location,
+          repos: data.public_repos,
+          followers: data.followers,
+          following: data.following,
+          homeUrl: data.html_url,
+          notFound: data.message
+        });
+      })
+      .catch(error => console.log('Oops! . There Is A Problem'));
+  }
+  componentDidMount() {
+    this.fetchProfile(this.state.username);
+  }
+  render() {
+    return (
+      <div>
+        <section id="card">
+          <Profile data={this.state} />
+        </section>
+      </div>
+    );
+  }
+}
+
+class Profile extends React.Component {
+  render() {
+    let data = this.props.data;
+    let followers = `${data.homeUrl}/followers`;
+    let repositories = `${data.homeUrl}?tab=repositories`;
+    let following = `${data.homeUrl}/following`;
+    return (
+      <section className="github--profile">
+        <div className="github--profile__info">
+          <a
+            href={data.homeUrl}
+            target="_blank"
+            title={data.name || data.username}
+          >
+            <img src={data.avatar} alt={data.username} />
+          </a>
+          <h2>
+            <a href={data.homeUrl} title={data.username} target="_blank">
+              {data.name || data.username}
+            </a>
+          </h2>
+        </div>
+        <div className="github--profile__state">
+          <ul>
+            <li>
+              <a href={followers} target="_blank" title="Number Of Followers">
+                <i>{data.followers}</i>
+                <span>Followers</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href={repositories}
+                target="_blank"
+                title="Number Of Repository"
+              >
+                <i>{data.repos}</i>
+                <span>Repository</span>
+              </a>
+            </li>
+            <li>
+              <a href={following} target="_blank" title="Number Of Following">
+                <i>{data.following}</i>
+                <span>Following</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+    );
+  }
+}
+
+render(<App />, document.getElementById('root'));
+Great! You should now be seeing your GitHub picture, your name, number of followers, number of repositories and number of people you are following.
+
+
+
+Higher-Order Components
+A higher-order component (HOC), according to the React documentation, "is an advanced technique in React for reusing component logic. HOCs are not part of the React API, per se. They are a pattern that emerges from React's compositional nature." This pattern is used to share common functionality between components without repeating code.
+
+Essentially, higher-order components are functions that take in components and return new components. HOCs are common in third-party libraries, such as with Redux's connect().
+
+As a simple example, consider the Department and Branch components below:
+
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const Department = (props) => (
+  <div>{props.name}</div>
+);
+
+const Branch = (props) => (
+  <div>{props.title}</div>
+);
+Now, imagine that you want the option to put a heading above each component. However, you can't change the Department and Branch components because they're already used in multiple places within your code. This is a very common scenario in programming. To solve, you need to EXTEND the component without modifying. Higher Order Components help with this problem.
+
+The higher order component will first accept the original component as a parameter. In the code below, the parameter is named WrappedComponent. Then, the HOC (Higher Order Component) will return a new component in the form of a function that accepts props as a parameter and returns the original component with some new content.
+
+const WithHeading = WrappedComponent => (props) => {
+  return (
+    <div>
+      <h2>{props.children}</h2>
+      <WrappedComponent {...props} />
+    </div>
+  );
+}
+Above, you should notice the use of the children property of props. Using this property, you can access the values that are INSIDE of the opening and closing tags of the component when it is invoked. Soon, you will see how values are passed to these children when the components are called.
+
+Now, two new components will be created by using the WithHeading HOC with the Department and Branch components. Two new constants, HeadingDepartment and HeadingBranch, are set to represent these new components, which are the returning functions from the HOC.
+
+const HeadingDepartment = WithHeading(Department);
+const HeadingBranch = WithHeading(Branch);
+Now it's time to call the new components that use the HOC and mount them to the DOM.
+
+const App = () => (
+  <div>
+    <HeadingDepartment name="Engineering">Department</HeadingDepartment>
+    <HeadingBranch title="Norfolk, VA">Branch</HeadingBranch>
+  </div>
+);
+
+ReactDOM.render(<App />, document.getElementById('root));
+If you look at the code where the HeadingDepartment and HeadingBranch components are invoked, you can see that they are passed values between the opening and closing tags. Those values are what the HOC will use for the heading — they will be the children property of the props object.
+
+Additional Info!
+The children property of the props object contains the values provided between the opening and closing tags of a component. For more information on props.children, please visit: composition-vs-inheritance.
+
+Using a HOC, the Department and Branch component did not need to be modified to display a heading above them. Instead, their original behavior was extended.
+
+Key Terms
+Below is a list and short description of the important keywords you have learned in this lesson. Please read through and go back and review any concepts you don't understand fully. Great Work!
+
+Keyword	Description
+Lifecycle Methods	Allows for performing of actions at various times with the DOM
+Mounting	When an instance of a component is created and then inserted into the DOM.
+Updating	When an update is triggered by changes to props or state and the component is updated within the DOM.
+Unmounting	When a component is removed from the DOM.
+Synchronous	Actions and events that happen one after another.
+Asynchronous	Actions and events that happen at the same time to prevent the entire application from breaking.
+Higher-Order Components	Functions that take in a component and returns a new component, giving it added features without modifying the original component.
+Previous
+
+
+
+
+
+
+
+
+
